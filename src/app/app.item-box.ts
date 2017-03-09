@@ -7,7 +7,14 @@ import { UUIDService as uuid }  from './app.uuid.service';
 @Component({
     selector: 'item-box',
     template: `
-        <li>{{item.id}} - {{item.name}} <button (click)="editItem()">Edit</button></li>
+        <li>
+            {{item.id}} - {{item.name}}
+            <ul>
+                <li *ngFor="let subitem of item.columns">
+                    {{ subitem.name }} [{{ subitem.type }}]
+                </li>
+            </ul>
+        </li>
     `,
 })
 export class ItemBox{
@@ -19,6 +26,7 @@ export class ItemBox{
     @Input() item: Item;
     @Input() personsListId: string;
     @Input() personEditId: string;
+    @Input() getTableStructure: string;
 
     editItem(){
         this.item.name = this.uuid.uuid();

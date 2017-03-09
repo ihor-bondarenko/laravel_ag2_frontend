@@ -7,9 +7,8 @@ import { UUIDService as uuid }  from './app.uuid.service';
 @Component({
     selector: 'persons-list',
     template: `
-        <button (click)="addNewItem()">+</button>
         <ul>
-            <item-box [personsListId]="personsListId" [personEditId]="personEditId" *ngFor="let item of items" [item]="item"></item-box>
+            <item-box [personsListId]="personsListId" [personEditId]="personEditId" [getTableStructure]="getTableStructure" *ngFor="let item of items" [item]="item"></item-box>
         </ul>
   `,
 })
@@ -17,6 +16,7 @@ export class AppPersonsList implements OnInit, OnChanges{
     items: Item[];
     @Input() personsListId: string;
     @Input() personEditId: string;
+    @Input() getTableStructure: string;
 
     constructor(
         private itemService: AppService,
@@ -44,9 +44,9 @@ export class AppPersonsList implements OnInit, OnChanges{
     }
 
     ngOnInit(){
-        this.loadList();
-        AppEmitterService.get(this.personsListId).subscribe((item:Item) => {console.log(item);});
-        AppEmitterService.get(this.personEditId).subscribe((item:Item) => {console.log(item);});
+        //this.loadList();
+        AppEmitterService.get(this.getTableStructure).subscribe((item:Item) => {this.loadList()});
+        //AppEmitterService.get(this.personEditId).subscribe((item:Item) => {console.log(item);});
     }
 
     ngOnChanges(changes:any) {

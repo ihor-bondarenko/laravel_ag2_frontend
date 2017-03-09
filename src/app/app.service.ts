@@ -10,7 +10,7 @@ export class AppService {
     // Resolve HTTP using the constructor
     constructor (private http: Http) {}
     // private instance variable to hold base url
-    private commentsUrl = 'http://laravel.local/get-list';
+    private commentsUrl = 'http://laravel.local:8124/get-table-structure';
     // private commentsUrl = 'http://578f454de2fa491100415d08.mockapi.io/api/Comment';
 
     // Fetch all existing comments
