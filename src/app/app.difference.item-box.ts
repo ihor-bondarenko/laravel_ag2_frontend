@@ -5,10 +5,10 @@ import { AppEmitterService } from './app.emitter.service';
 import { UUIDService as uuid }  from './app.uuid.service';
 
 @Component({
-    selector: 'item-box',
+    selector: 'difference-item-box',
     template: `
         <li>
-            {{item.id}} - {{item.name}}
+            {{item.name}}
             <ul>
                 <li *ngFor="let subitem of item.columns">
                     {{ subitem.name }} [{{ subitem.type }}]
@@ -17,22 +17,20 @@ import { UUIDService as uuid }  from './app.uuid.service';
         </li>
     `,
 })
-export class ItemBox{
+export class DifferenceItemBox{
     constructor(
         private itemService: AppService,
         private uuid: uuid
     ){}
 
     @Input() item: Item;
+    @Input() differenceIndex: string;
     @Input() personsListId: string;
     @Input() personEditId: string;
     @Input() getTableStructure: string;
     @Input() compareTableStructure: string;
 
     editItem(){
-        this.item.name = this.uuid.uuid();
-        console.log('-- edited --');
-        AppEmitterService.get(this.personEditId).emit(this.item);
     }
     ngOnChanges(changes:any) {
     }

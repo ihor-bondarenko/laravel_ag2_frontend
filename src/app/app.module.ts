@@ -7,6 +7,7 @@ import { MaterialModule } from '@angular/material';
 import { AppComponent }  from './app.component';
 import { AppPersonsList }  from './app.persons-list';
 import { ItemBox }  from './app.item-box';
+import { DifferenceItemBox } from './app.difference.item-box'
 
 import { AppService } from './app.service';
 import { UUIDService as uuid }  from './app.uuid.service';
@@ -19,7 +20,12 @@ import { UUIDService as uuid }  from './app.uuid.service';
     JsonpModule,
     MaterialModule
   ],
-  declarations: [ AppComponent, AppPersonsList, ItemBox ],
+  declarations: [
+    AppComponent,
+    AppPersonsList,
+    ItemBox,
+    DifferenceItemBox
+  ],
   providers: [
     AppService,
     uuid

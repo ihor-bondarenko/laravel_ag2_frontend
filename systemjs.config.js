@@ -4,9 +4,10 @@
  */
 (function (global) {
   System.config({
+    "defaultJSExtensions": true,
     paths: {
       // paths serve as alias
-      'npm:': 'node_modules/'
+      'npm:': '../node_modules/'
     },
     // map tells the System loader where to look for things
     map: {
@@ -26,7 +27,8 @@
 
       // other libraries
       'rxjs':                      'npm:rxjs',
-      'angular-in-memory-web-api': 'npm:angular-in-memory-web-api/bundles/in-memory-web-api.umd.js'
+      'angular-in-memory-web-api': 'npm:angular-in-memory-web-api/bundles/in-memory-web-api.umd.js',
+      lodash: 'node_modules/lodash'
     },
     // packages tells the System loader how to load when no filename and/or no extension
     packages: {
@@ -35,6 +37,10 @@
       },
       rxjs: {
         defaultExtension: 'js'
+      },
+      lodash: {
+        main:'index.js',
+        defaultExtension:'js'
       }
     }
   });
