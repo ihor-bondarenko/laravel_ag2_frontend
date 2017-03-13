@@ -16,7 +16,9 @@ var app_persons_list_1 = require("./app.persons-list");
 var app_item_box_1 = require("./app.item-box");
 var app_difference_item_box_1 = require("./app.difference.item-box");
 var app_service_1 = require("./app.service");
+var app_service_socketio_1 = require("./app.service.socketio");
 var app_uuid_service_1 = require("./app.uuid.service");
+var app_state_service_1 = require("./app.state.service");
 var AppModule = (function () {
     function AppModule() {
     }
@@ -39,7 +41,9 @@ AppModule = __decorate([
         ],
         providers: [
             app_service_1.AppService,
-            app_uuid_service_1.UUIDService
+            app_uuid_service_1.UUIDService,
+            app_service_socketio_1.SocketService,
+            app_state_service_1.AppStateService
         ],
         bootstrap: [app_component_1.AppComponent]
     })

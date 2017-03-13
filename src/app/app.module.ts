@@ -10,7 +10,9 @@ import { ItemBox }  from './app.item-box';
 import { DifferenceItemBox } from './app.difference.item-box'
 
 import { AppService } from './app.service';
+import { SocketService } from './app.service.socketio';
 import { UUIDService as uuid }  from './app.uuid.service';
+import { AppStateService } from "./app.state.service";
 
 @NgModule({
   imports:      [
@@ -28,7 +30,9 @@ import { UUIDService as uuid }  from './app.uuid.service';
   ],
   providers: [
     AppService,
-    uuid
+    uuid,
+    SocketService,
+    AppStateService
   ],
   bootstrap:    [ AppComponent ]
 })

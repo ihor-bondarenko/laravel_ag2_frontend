@@ -10,16 +10,20 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
-var rxjs_1 = require("rxjs");
+var Rx_1 = require("rxjs/Rx");
 var io = require("socket.io-client");
+var app_emitter_service_1 = require("./app.emitter.service");
+var app_state_service_1 = require("./app.state.service");
 var SocketService = (function () {
-    function SocketService() {
-        this.host = window.location.protocol + "//" + window.location.hostname + ":" + window.location.port;
+    function SocketService(appStateService) {
+        this.appStateService = appStateService;
+        this.host = window.location.protocol + "//" + window.location.hostname + ":" + 8124;
+        this.initSocketConnect();
     }
     // Get items observable
-    SocketService.prototype.get = function (name) {
+    SocketService.prototype.initSocketConnect = function (name) {
         var _this = this;
-        this.name = name;
+        this.name = 'clients';
         var socketUrl = this.host + "/" + this.name;
         this.socket = io.connect(socketUrl);
         this.socket.on("connect", function () { return _this.connect(); });
@@ -27,20 +31,25 @@ var SocketService = (function () {
         this.socket.on("error", function (error) {
             console.log("ERROR: \"" + error + "\" (" + socketUrl + ")");
         });
+        this.socket.on("new-table-structure", function (data) {
+            console.log(data);
+            app_emitter_service_1.AppEmitterService.get('new-table-structure').emit(data);
+            _this.appStateService.states.progressBarMode = "buffer";
+        });
+        this.socket.on("last-structure-update", function (data) {
+            app_emitter_service_1.AppEmitterService.get('last-structure-update').emit(data);
+        });
         // Return observable which follows "create" and "remove" signals from socket stream
-        return rxjs_1.Observable.create(function (observer) {
-            _this.socket.on("create", function (item) { return observer.next({ action: "create", item: item }); });
-            _this.socket.on("remove", function (item) { return observer.next({ action: "remove", item: item }); });
+        return Rx_1.Observable.create(function (observer) {
+            //this.socket.on("create", (item: any) => observer.next({ action: "create", item: item }) );
+            //this.socket.on("remove", (item: any) => observer.next({ action: "remove", item: item }) );
             return function () { return _this.socket.close(); };
         });
     };
-    // Create signal
-    SocketService.prototype.create = function (name) {
-        this.socket.emit("create", name);
-    };
-    // Remove signal
-    SocketService.prototype.remove = function (name) {
-        this.socket.emit("remove", name);
+    SocketService.prototype.getTableStructure = function () {
+        // console.log(this.appStateService.states);
+        this.appStateService.states.progressBarMode = "query";
+        this.socket.emit("get-table-structure", {});
     };
     // Handle connection opening
     SocketService.prototype.connect = function () {
@@ -56,7 +65,7 @@ var SocketService = (function () {
 }());
 SocketService = __decorate([
     core_1.Injectable(),
-    __metadata("design:paramtypes", [])
+    __metadata("design:paramtypes", [app_state_service_1.AppStateService])
 ], SocketService);
 exports.SocketService = SocketService;
 //# sourceMappingURL=app.service.socketio.js.map

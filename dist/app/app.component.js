@@ -12,14 +12,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var app_service_1 = require("./app.service");
 var app_emitter_service_1 = require("./app.emitter.service");
+var app_service_socketio_1 = require("./app.service.socketio");
+var app_state_service_1 = require("./app.state.service");
 var AppComponent = (function () {
-    function AppComponent(itemService) {
+    function AppComponent(itemService, appStateService, SocketService) {
         this.itemService = itemService;
-        this.name = 'Angular';
+        this.appStateService = appStateService;
+        this.SocketService = SocketService;
+        this.Title = 'Database Manager';
         this.personsListId = 'PERSONS_LIST';
         this.personEditId = 'PERSON_EDIT';
         this.getTableStructure = 'TABLE_STRUCTURE';
         this.compareTableStructure = 'COMPARE_TABLE_STRUCTURE';
+        //this.SocketService = new SocketService();
     }
     AppComponent.prototype.loadTableStructure = function () {
         app_emitter_service_1.AppEmitterService.get(this.getTableStructure).emit({});
@@ -28,6 +33,13 @@ var AppComponent = (function () {
         app_emitter_service_1.AppEmitterService.get(this.compareTableStructure).emit({});
     };
     AppComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        app_emitter_service_1.AppEmitterService.get('last-structure-update').subscribe(function (date) {
+            _this.lastStructureUpdate = date;
+        });
+        app_emitter_service_1.AppEmitterService.get('last-compare-update').subscribe(function (date) {
+            _this.lastCompareUpdate = date;
+        });
     };
     AppComponent.prototype.ngOnChanges = function (changes) {
     };
@@ -38,7 +50,9 @@ AppComponent = __decorate([
         selector: 'my-app',
         templateUrl: './dist/app/app.component.html'
     }),
-    __metadata("design:paramtypes", [app_service_1.AppService])
+    __metadata("design:paramtypes", [app_service_1.AppService,
+        app_state_service_1.AppStateService,
+        app_service_socketio_1.SocketService])
 ], AppComponent);
 exports.AppComponent = AppComponent;
 //# sourceMappingURL=app.component.js.map

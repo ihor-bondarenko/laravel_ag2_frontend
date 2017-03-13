@@ -5,6 +5,9 @@ import { AppEmitterService } from './app.emitter.service';
 import { ItemBox } from './app.item-box';
 import { UUIDService as uuid }  from './app.uuid.service';
 import * as _ from "lodash";
+import { SocketService } from './app.service.socketio';
+import { AppStateService } from "./app.state.service";
+
 @Component({
     selector: 'persons-list',
     template: `
@@ -17,6 +20,7 @@ import * as _ from "lodash";
         <ul>
             <difference-item-box [personsListId]="personsListId" [personEditId]="personEditId" [getTableStructure]="getTableStructure" [compareTableStructure]="compareTableStructure" *ngFor="let differenceItem of differenceItems; let differenceIndex = index" [differenceIndex]="differenceIndex" [item]="differenceItem"></difference-item-box>
         </ul>
+        <button (click)="checkStates()">Check states</button>
   `,
 })
 export class AppPersonsList implements OnInit, OnChanges{
@@ -28,11 +32,18 @@ export class AppPersonsList implements OnInit, OnChanges{
     @Input() personEditId: string;
     @Input() getTableStructure: string;
     @Input() compareTableStructure: string;
+   // @Input() compareTableStructure: string;
+    @Input() SocketService: SocketService;
 
     constructor(
         private itemService: AppService,
-        private uuid: uuid
+        private uuid: uuid,
+        private appStateService: AppStateService
     ){}
+
+    checkStates() {
+        console.log(this.appStateService);
+    }
 
     compareTables() {
         this.itemService.compareTables().subscribe(
@@ -51,16 +62,20 @@ export class AppPersonsList implements OnInit, OnChanges{
         )
     }
 
-    loadList(){
-        this.itemService.getList().subscribe(
+    loadList() {
+        this.SocketService.getTableStructure();
+        /*this.itemService.getList().subscribe(
             comments => {
                     this.items = comments;
-            }, //Bind to view
+            },
             err => {
-                // Log errors if any
                 console.log(err);
             }
-        )
+        )*/
+    }
+
+    newTableStructure(items: any) {
+        this.items = items;
     }
 
     addNewItem():void {
@@ -75,6 +90,7 @@ export class AppPersonsList implements OnInit, OnChanges{
         //this.loadList();
         AppEmitterService.get(this.getTableStructure).subscribe((item:Item) => {this.loadList()});
         AppEmitterService.get(this.compareTableStructure).subscribe((item:Item) => {this.compareTables()});
+        AppEmitterService.get('new-table-structure').subscribe((items:Item[]) => {this.newTableStructure(items)});
         //AppEmitterService.get(this.personEditId).subscribe((item:Item) => {console.log(item);});
     }
 

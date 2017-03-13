@@ -15,11 +15,17 @@ var app_item_1 = require("./app.item");
 var app_emitter_service_1 = require("./app.emitter.service");
 var app_uuid_service_1 = require("./app.uuid.service");
 var _ = require("lodash");
+var app_service_socketio_1 = require("./app.service.socketio");
+var app_state_service_1 = require("./app.state.service");
 var AppPersonsList = (function () {
-    function AppPersonsList(itemService, uuid) {
+    function AppPersonsList(itemService, uuid, appStateService) {
         this.itemService = itemService;
         this.uuid = uuid;
+        this.appStateService = appStateService;
     }
+    AppPersonsList.prototype.checkStates = function () {
+        console.log(this.appStateService);
+    };
     AppPersonsList.prototype.compareTables = function () {
         var _this = this;
         this.itemService.compareTables().subscribe(function (comments) {
@@ -37,15 +43,18 @@ var AppPersonsList = (function () {
         });
     };
     AppPersonsList.prototype.loadList = function () {
-        var _this = this;
-        this.itemService.getList().subscribe(function (comments) {
-            _this.items = comments;
-        }, //Bind to view
-        function (//Bind to view
-            err) {
-            // Log errors if any
-            console.log(err);
-        });
+        this.SocketService.getTableStructure();
+        /*this.itemService.getList().subscribe(
+            comments => {
+                    this.items = comments;
+            },
+            err => {
+                console.log(err);
+            }
+        )*/
+    };
+    AppPersonsList.prototype.newTableStructure = function (items) {
+        this.items = items;
     };
     AppPersonsList.prototype.addNewItem = function () {
         var uuid = this.uuid.uuid();
@@ -59,6 +68,7 @@ var AppPersonsList = (function () {
         //this.loadList();
         app_emitter_service_1.AppEmitterService.get(this.getTableStructure).subscribe(function (item) { _this.loadList(); });
         app_emitter_service_1.AppEmitterService.get(this.compareTableStructure).subscribe(function (item) { _this.compareTables(); });
+        app_emitter_service_1.AppEmitterService.get('new-table-structure').subscribe(function (items) { _this.newTableStructure(items); });
         //AppEmitterService.get(this.personEditId).subscribe((item:Item) => {console.log(item);});
     };
     AppPersonsList.prototype.ngOnChanges = function (changes) {
@@ -81,13 +91,18 @@ __decorate([
     core_1.Input(),
     __metadata("design:type", String)
 ], AppPersonsList.prototype, "compareTableStructure", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", app_service_socketio_1.SocketService)
+], AppPersonsList.prototype, "SocketService", void 0);
 AppPersonsList = __decorate([
     core_1.Component({
         selector: 'persons-list',
-        template: "\n        <ul style=\"float: left;\">\n            <item-box [personsListId]=\"personsListId\" [personEditId]=\"personEditId\" [getTableStructure]=\"getTableStructure\" [compareTableStructure]=\"compareTableStructure\" *ngFor=\"let item of items\" [item]=\"item\"></item-box>\n        </ul>\n        <ul style=\"float: left;\">\n            <item-box [personsListId]=\"personsListId\" [personEditId]=\"personEditId\" [getTableStructure]=\"getTableStructure\" [compareTableStructure]=\"compareTableStructure\" *ngFor=\"let compareItem of compareItems\" [item]=\"compareItem\"></item-box>\n        </ul>\n        <ul>\n            <difference-item-box [personsListId]=\"personsListId\" [personEditId]=\"personEditId\" [getTableStructure]=\"getTableStructure\" [compareTableStructure]=\"compareTableStructure\" *ngFor=\"let differenceItem of differenceItems; let differenceIndex = index\" [differenceIndex]=\"differenceIndex\" [item]=\"differenceItem\"></difference-item-box>\n        </ul>\n  ",
+        template: "\n        <ul style=\"float: left;\">\n            <item-box [personsListId]=\"personsListId\" [personEditId]=\"personEditId\" [getTableStructure]=\"getTableStructure\" [compareTableStructure]=\"compareTableStructure\" *ngFor=\"let item of items\" [item]=\"item\"></item-box>\n        </ul>\n        <ul style=\"float: left;\">\n            <item-box [personsListId]=\"personsListId\" [personEditId]=\"personEditId\" [getTableStructure]=\"getTableStructure\" [compareTableStructure]=\"compareTableStructure\" *ngFor=\"let compareItem of compareItems\" [item]=\"compareItem\"></item-box>\n        </ul>\n        <ul>\n            <difference-item-box [personsListId]=\"personsListId\" [personEditId]=\"personEditId\" [getTableStructure]=\"getTableStructure\" [compareTableStructure]=\"compareTableStructure\" *ngFor=\"let differenceItem of differenceItems; let differenceIndex = index\" [differenceIndex]=\"differenceIndex\" [item]=\"differenceItem\"></difference-item-box>\n        </ul>\n        <button (click)=\"checkStates()\">Check states</button>\n  ",
     }),
     __metadata("design:paramtypes", [app_service_1.AppService,
-        app_uuid_service_1.UUIDService])
+        app_uuid_service_1.UUIDService,
+        app_state_service_1.AppStateService])
 ], AppPersonsList);
 exports.AppPersonsList = AppPersonsList;
 //# sourceMappingURL=app.persons-list.js.map

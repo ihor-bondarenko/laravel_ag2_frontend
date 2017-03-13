@@ -1,9 +1,17 @@
 <md-toolbar color="primary">
-    <h1>Hello {{name}}</h1>
+    <h1>{{Title}}</h1>
 </md-toolbar>
 <div style="padding: 7px">
-    <button md-raised-button (click)="loadTableStructure()">Get Data base structure</button>
-    <button md-raised-button (click)="loadTableCompare()">Compare structure</button>
+    <div>
+        <button md-raised-button (click)="loadTableStructure()">Get Data base structure</button>
+        <button md-raised-button (click)="loadTableCompare()">Compare structure</button>
+    </div>
+    <md-divider></md-divider>
+    <md-chip-list>
+        <md-chip>Last structure update: {{ lastStructureUpdate }}</md-chip>
+        <md-chip>Last compare update: {{ lastCompareUpdate }}</md-chip>
+    </md-chip-list>
     <hr>
-    <persons-list [personsListId]="personsListId" [personEditId]="personEditId" [getTableStructure]="getTableStructure" [compareTableStructure]="compareTableStructure"></persons-list>
+    <md-progress-bar [mode]="appStateService.states.progressBarMode" [value]="progressBarStatus"></md-progress-bar>
+    <persons-list [SocketService]="SocketService" [personsListId]="personsListId" [personEditId]="personEditId" [getTableStructure]="getTableStructure" [compareTableStructure]="compareTableStructure"></persons-list>
 </div>
