@@ -1,14 +1,27 @@
 import {Injectable, EventEmitter} from '@angular/core';
 import { AppEmitterService } from './app.emitter.service';
+import {Observable} from 'rxjs/Rx';
+import { Subject } from 'rxjs/Subject';
+import * as _ from "lodash";
 
 @Injectable()
 export class AppStateService {
+    private subject = new Subject<any>();
 
     constructor() {
-
+        //
     }
 
-    public states: { [ID: string]: any } = {
+    updateAppState(state: string, value: any) {
+           this.states[state] = value;
+           this.subject.next( this.states );
+    }
+
+    getStates(): Observable<any> {
+        return this.subject.asObservable();
+    }
+
+    private states: { [ID: string]: any } = {
         "progressBarMode": "determine"
     };
 

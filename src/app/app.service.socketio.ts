@@ -25,9 +25,9 @@ export class SocketService {
             console.log(`ERROR: "${error}" (${socketUrl})`);
         });
         this.socket.on("new-table-structure",(data: any) => {
-            console.log(data);
             AppEmitterService.get('new-table-structure').emit(data);
-            this.appStateService.states.progressBarMode = "buffer";
+            //this.appStateService.states.progressBarMode = "buffer";
+            this.appStateService.updateAppState("progressBarMode", "determined");
         });
         this.socket.on("last-structure-update",(data: string) => {
             AppEmitterService.get('last-structure-update').emit(data);
@@ -43,7 +43,8 @@ export class SocketService {
 
     public getTableStructure() {
        // console.log(this.appStateService.states);
-        this.appStateService.states.progressBarMode = "query";
+        //this.appStateService.states.progressBarMode = "query";
+        this.appStateService.updateAppState("progressBarMode", "query");
         this.socket.emit("get-table-structure", {});
     }
 

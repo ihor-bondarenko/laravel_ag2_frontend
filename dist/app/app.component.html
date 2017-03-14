@@ -12,6 +12,6 @@
         <md-chip>Last compare update: {{ lastCompareUpdate }}</md-chip>
     </md-chip-list>
     <hr>
-    <md-progress-bar [mode]="appStateService.states.progressBarMode" [value]="progressBarStatus"></md-progress-bar>
+    <md-progress-bar [mode]="appStates.progressBarMode" [value]="progressBarStatus"></md-progress-bar>
     <persons-list [SocketService]="SocketService" [personsListId]="personsListId" [personEditId]="personEditId" [getTableStructure]="getTableStructure" [compareTableStructure]="compareTableStructure"></persons-list>
 </div>

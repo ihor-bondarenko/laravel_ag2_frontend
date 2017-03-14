@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { Subscription } from 'rxjs/Subscription';
 import {AppService} from './app.service';
 import { Item } from './app.item';
 import { AppEmitterService } from './app.emitter.service';
@@ -19,6 +20,8 @@ export class AppComponent implements OnInit, OnChanges{
   //private SocketService: SocketService;
   private lastStructureUpdate: string;
   private lastCompareUpdate: string;
+  private subscription: Subscription;
+  private appStates: { [ID: string]: any };
 
   constructor(
       private itemService: AppService,
@@ -26,6 +29,8 @@ export class AppComponent implements OnInit, OnChanges{
       private SocketService: SocketService
   ){
     //this.SocketService = new SocketService();
+    this.subscription = this.appStateService.getStates().subscribe(states => { this.appStates = states });
+    this.appStates = {};
   }
 
   loadTableStructure() {

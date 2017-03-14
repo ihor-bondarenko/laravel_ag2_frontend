@@ -20,7 +20,6 @@ import { AppStateService } from "./app.state.service";
         <ul>
             <difference-item-box [personsListId]="personsListId" [personEditId]="personEditId" [getTableStructure]="getTableStructure" [compareTableStructure]="compareTableStructure" *ngFor="let differenceItem of differenceItems; let differenceIndex = index" [differenceIndex]="differenceIndex" [item]="differenceItem"></difference-item-box>
         </ul>
-        <button (click)="checkStates()">Check states</button>
   `,
 })
 export class AppPersonsList implements OnInit, OnChanges{

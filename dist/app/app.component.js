@@ -16,6 +16,7 @@ var app_service_socketio_1 = require("./app.service.socketio");
 var app_state_service_1 = require("./app.state.service");
 var AppComponent = (function () {
     function AppComponent(itemService, appStateService, SocketService) {
+        var _this = this;
         this.itemService = itemService;
         this.appStateService = appStateService;
         this.SocketService = SocketService;
@@ -25,6 +26,8 @@ var AppComponent = (function () {
         this.getTableStructure = 'TABLE_STRUCTURE';
         this.compareTableStructure = 'COMPARE_TABLE_STRUCTURE';
         //this.SocketService = new SocketService();
+        this.subscription = this.appStateService.getStates().subscribe(function (states) { _this.appStates = states; });
+        this.appStates = {};
     }
     AppComponent.prototype.loadTableStructure = function () {
         app_emitter_service_1.AppEmitterService.get(this.getTableStructure).emit({});

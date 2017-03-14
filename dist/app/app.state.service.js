@@ -10,12 +10,22 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
+var Subject_1 = require("rxjs/Subject");
 var AppStateService = (function () {
     function AppStateService() {
+        this.subject = new Subject_1.Subject();
         this.states = {
             "progressBarMode": "determine"
         };
+        //
     }
+    AppStateService.prototype.updateAppState = function (state, value) {
+        this.states[state] = value;
+        this.subject.next(this.states);
+    };
+    AppStateService.prototype.getStates = function () {
+        return this.subject.asObservable();
+    };
     AppStateService.prototype.get = function (ID) {
         if (this.states[ID]) {
             return this.states[ID];

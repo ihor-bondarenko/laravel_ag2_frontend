@@ -32,9 +32,9 @@ var SocketService = (function () {
             console.log("ERROR: \"" + error + "\" (" + socketUrl + ")");
         });
         this.socket.on("new-table-structure", function (data) {
-            console.log(data);
             app_emitter_service_1.AppEmitterService.get('new-table-structure').emit(data);
-            _this.appStateService.states.progressBarMode = "buffer";
+            //this.appStateService.states.progressBarMode = "buffer";
+            _this.appStateService.updateAppState("progressBarMode", "determined");
         });
         this.socket.on("last-structure-update", function (data) {
             app_emitter_service_1.AppEmitterService.get('last-structure-update').emit(data);
@@ -48,7 +48,8 @@ var SocketService = (function () {
     };
     SocketService.prototype.getTableStructure = function () {
         // console.log(this.appStateService.states);
-        this.appStateService.states.progressBarMode = "query";
+        //this.appStateService.states.progressBarMode = "query";
+        this.appStateService.updateAppState("progressBarMode", "query");
         this.socket.emit("get-table-structure", {});
     };
     // Handle connection opening
