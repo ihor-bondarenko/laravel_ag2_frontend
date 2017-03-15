@@ -6,12 +6,16 @@
         <button md-raised-button (click)="loadTableStructure()">Get Data base structure</button>
         <button md-raised-button (click)="loadTableCompare()">Compare structure</button>
     </div>
-    <md-divider></md-divider>
+    <hr>
     <md-chip-list>
-        <md-chip>Last structure update: {{ lastStructureUpdate }}</md-chip>
+        <md-chip>
+            Last structure update: {{ lastStructureUpdate }}
+        </md-chip>
+        <button md-mini-fab [color]="warn"><md-icon>view_list</md-icon></button>
         <md-chip>Last compare update: {{ lastCompareUpdate }}</md-chip>
     </md-chip-list>
     <hr>
     <md-progress-bar [mode]="appStates.progressBarMode" [value]="progressBarStatus"></md-progress-bar>
-    <persons-list [SocketService]="SocketService" [personsListId]="personsListId" [personEditId]="personEditId" [getTableStructure]="getTableStructure" [compareTableStructure]="compareTableStructure"></persons-list>
+    <versions-list></versions-list>
+    <db-structure-list [SocketService]="SocketService" [personsListId]="personsListId" [personEditId]="personEditId" [getTableStructure]="getTableStructure" [compareTableStructure]="compareTableStructure"></db-structure-list>
 </div>

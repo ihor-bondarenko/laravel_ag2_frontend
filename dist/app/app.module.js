@@ -15,10 +15,13 @@ var app_component_1 = require("./app.component");
 var app_persons_list_1 = require("./app.persons-list");
 var app_item_box_1 = require("./app.item-box");
 var app_difference_item_box_1 = require("./app.difference.item-box");
+var app_versions_list_1 = require("./app.versions-list");
 var app_service_1 = require("./app.service");
 var app_service_socketio_1 = require("./app.service.socketio");
 var app_uuid_service_1 = require("./app.uuid.service");
 var app_state_service_1 = require("./app.state.service");
+var app_snakebar_service_1 = require("./app.snakebar.service");
+var app_snackbar_1 = require("./app.snackbar");
 var AppModule = (function () {
     function AppModule() {
     }
@@ -37,14 +40,18 @@ AppModule = __decorate([
             app_component_1.AppComponent,
             app_persons_list_1.AppPersonsList,
             app_item_box_1.ItemBox,
-            app_difference_item_box_1.DifferenceItemBox
+            app_difference_item_box_1.DifferenceItemBox,
+            app_versions_list_1.AppVersionsList,
+            app_snackbar_1.AppSnackBar
         ],
         providers: [
             app_service_1.AppService,
             app_uuid_service_1.UUIDService,
             app_service_socketio_1.SocketService,
-            app_state_service_1.AppStateService
+            app_state_service_1.AppStateService,
+            app_snakebar_service_1.AppSnakeBarService
         ],
+        entryComponents: [app_snackbar_1.AppSnackBar],
         bootstrap: [app_component_1.AppComponent]
     })
 ], AppModule);

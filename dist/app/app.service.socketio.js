@@ -14,9 +14,11 @@ var Rx_1 = require("rxjs/Rx");
 var io = require("socket.io-client");
 var app_emitter_service_1 = require("./app.emitter.service");
 var app_state_service_1 = require("./app.state.service");
+var app_snakebar_service_1 = require("./app.snakebar.service");
 var SocketService = (function () {
-    function SocketService(appStateService) {
+    function SocketService(appStateService, appSnakeBarService) {
         this.appStateService = appStateService;
+        this.appSnakeBarService = appSnakeBarService;
         this.host = window.location.protocol + "//" + window.location.hostname + ":" + 8124;
         this.initSocketConnect();
     }
@@ -35,9 +37,14 @@ var SocketService = (function () {
             app_emitter_service_1.AppEmitterService.get('new-table-structure').emit(data);
             //this.appStateService.states.progressBarMode = "buffer";
             _this.appStateService.updateAppState("progressBarMode", "determined");
+            _this.appSnakeBarService.openSnackBar('New structure of master DB received', 'close');
         });
         this.socket.on("last-structure-update", function (data) {
             app_emitter_service_1.AppEmitterService.get('last-structure-update').emit(data);
+        });
+        this.socket.on("new-versions-list", function (data) {
+            console.log('-- new versions list emmited --');
+            app_emitter_service_1.AppEmitterService.get("new-versions-list").emit(data);
         });
         // Return observable which follows "create" and "remove" signals from socket stream
         return Rx_1.Observable.create(function (observer) {
@@ -56,17 +63,20 @@ var SocketService = (function () {
     SocketService.prototype.connect = function () {
         console.log("Connected to \"" + this.name + "\"");
         // Request initial list when connected
-        this.socket.emit("list");
+        this.socket.emit("get-versions-list");
     };
     // Handle connection closing
     SocketService.prototype.disconnect = function () {
         console.log("Disconnected from \"" + this.name + "\"");
     };
+    SocketService.prototype.ngOnInit = function () {
+        //
+    };
     return SocketService;
 }());
 SocketService = __decorate([
     core_1.Injectable(),
-    __metadata("design:paramtypes", [app_state_service_1.AppStateService])
+    __metadata("design:paramtypes", [app_state_service_1.AppStateService, app_snakebar_service_1.AppSnakeBarService])
 ], SocketService);
 exports.SocketService = SocketService;
 //# sourceMappingURL=app.service.socketio.js.map

@@ -9,12 +9,12 @@ import { SocketService } from './app.service.socketio';
 import { AppStateService } from "./app.state.service";
 
 @Component({
-    selector: 'persons-list',
+    selector: 'db-structure-list',
     template: `
-        <ul style="float: left;">
+        <ul>
             <item-box [personsListId]="personsListId" [personEditId]="personEditId" [getTableStructure]="getTableStructure" [compareTableStructure]="compareTableStructure" *ngFor="let item of items" [item]="item"></item-box>
         </ul>
-        <ul style="float: left;">
+        <ul>
             <item-box [personsListId]="personsListId" [personEditId]="personEditId" [getTableStructure]="getTableStructure" [compareTableStructure]="compareTableStructure" *ngFor="let compareItem of compareItems" [item]="compareItem"></item-box>
         </ul>
         <ul>
