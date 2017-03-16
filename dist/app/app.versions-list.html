@@ -1,4 +1,7 @@
 <md-card *ngFor="let version of versions">
     <md-card-title>{{ version.name }}</md-card-title>
-    <md-card-actions><button md-mini-fab [color]="warn" (click)="compareDatabase(version)"><md-icon>sync</md-icon></button></md-card-actions>
+    <md-card-actions>
+        <button md-mini-fab [color]="warn" (click)="compareDatabase(version)" *ngIf="!version.updateState"><md-icon>sync</md-icon></button>
+        <md-spinner style="width: 32px;height: 32px;" *ngIf="version.updateState"></md-spinner>
+    </md-card-actions>
 </md-card>

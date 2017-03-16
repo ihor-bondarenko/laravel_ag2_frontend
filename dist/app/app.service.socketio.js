@@ -46,6 +46,9 @@ var SocketService = (function () {
             console.log('-- new versions list emmited --');
             app_emitter_service_1.AppEmitterService.get("new-versions-list").emit(data);
         });
+        this.socket.on("updated-version-data", function (version) {
+            app_emitter_service_1.AppEmitterService.get("updated-version-data").emit(version);
+        });
         // Return observable which follows "create" and "remove" signals from socket stream
         return Rx_1.Observable.create(function (observer) {
             //this.socket.on("create", (item: any) => observer.next({ action: "create", item: item }) );
@@ -61,9 +64,13 @@ var SocketService = (function () {
     };
     // Handle connection opening
     SocketService.prototype.connect = function () {
+        var _this = this;
         console.log("Connected to \"" + this.name + "\"");
         // Request initial list when connected
         this.socket.emit("get-versions-list");
+        app_emitter_service_1.AppEmitterService.get('update-version-data').subscribe(function (version) {
+            _this.socket.emit('update-version-data', version);
+        });
     };
     // Handle connection closing
     SocketService.prototype.disconnect = function () {

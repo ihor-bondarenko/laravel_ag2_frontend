@@ -4,6 +4,7 @@ import * as io from "socket.io-client";
 import { AppEmitterService } from './app.emitter.service';
 import { AppStateService } from './app.state.service';
 import { AppSnakeBarService } from "./app.snakebar.service";
+import { Version } from "./app.version";
 
 @Injectable()
 export class SocketService implements OnInit {
@@ -40,6 +41,9 @@ export class SocketService implements OnInit {
             AppEmitterService.get("new-versions-list").emit(data);
         });
 
+        this.socket.on("updated-version-data",(version: Version) => {
+            AppEmitterService.get("updated-version-data").emit(version);
+        });
         // Return observable which follows "create" and "remove" signals from socket stream
         return Observable.create((observer: any) => {
             //this.socket.on("create", (item: any) => observer.next({ action: "create", item: item }) );
@@ -58,9 +62,11 @@ export class SocketService implements OnInit {
     // Handle connection opening
     private connect() {
         console.log(`Connected to "${this.name}"`);
-
         // Request initial list when connected
         this.socket.emit("get-versions-list");
+        AppEmitterService.get('update-version-data').subscribe((version: Version[]) => {
+            this.socket.emit('update-version-data',version);
+        });
     }
 
     // Handle connection closing

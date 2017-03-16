@@ -14,23 +14,35 @@ var app_service_1 = require("./app.service");
 var app_service_socketio_1 = require("./app.service.socketio");
 var app_state_service_1 = require("./app.state.service");
 var app_emitter_service_1 = require("./app.emitter.service");
+var _ = require("lodash");
 var AppVersionsList = (function () {
     function AppVersionsList(itemService, appStateService, socketService) {
         this.itemService = itemService;
         this.appStateService = appStateService;
         this.socketService = socketService;
         this.versions = [];
+        //
     }
     AppVersionsList.prototype.ngOnInit = function () {
         var _this = this;
         app_emitter_service_1.AppEmitterService.get('new-versions-list').subscribe(function (list) {
+            console.log(list);
             _this.versions = list;
+        });
+        app_emitter_service_1.AppEmitterService.get('updated-version-data').subscribe(function (version) {
+            console.log(version);
+            var objIndex = _.findIndex(_this.versions, { id: version.id });
+            if (objIndex !== -1) {
+                _this.versions[objIndex] = version;
+            }
+            console.log(_this.versions);
         });
     };
     AppVersionsList.prototype.ngOnChanges = function (changes) {
     };
     AppVersionsList.prototype.compareDatabase = function (version) {
-        console.log(version);
+        version.updateState = true;
+        app_emitter_service_1.AppEmitterService.get('update-version-data').emit(version);
     };
     return AppVersionsList;
 }());
